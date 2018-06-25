@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('partials/head') %>
+
+  <body id="<%= pageID %>">
+    <!-- include the navigation bar -->
+    <%- include('partials/nav') %>
+
+    <!-- Page content -->
+    <div class="container mainBody">
+      <h1><%= heading %></h1>
+      <p>Controller Settings</p>
+    </div>
+
+    <!-- Load js dependencies -->
+    <%- include('partials/bs_scripts') %>
+
+
+  </body>
+</html>

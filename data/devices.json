@@ -1,0 +1,89 @@
+{
+  "devices":{
+  "types" : [{
+    "relay" : {
+      "iodir" : "out",
+      "defaultValue" : "low"
+    },
+    "button":{
+      "iodir": "in",
+      "defaultValue": "low"
+    },
+    "led": {
+      "iodir": "out",
+      "defaultValue": "low"
+    },
+    "sensor": {
+      "iodir" : "in",
+      "defaultValue": 0
+    }
+
+  }],
+  "mydevices" : [{
+    "ID": 1,
+    "name": "Pool Pump",
+    "description": "Jandy Pool Pump",
+    "type": "relay" ,
+    "gpin": 4
+  },{
+    "ID": 2,
+    "name": "Pool Light",
+    "description" : "Pool Light",
+    "type" : "relay",
+    "gpin" : 17
+  },{
+    "ID": 3,
+    "name": "Yard Lights",
+    "description" : "Pole lights around the Pool.",
+    "type" : "relay",
+    "gpin" : null
+  },{
+    "ID": 4,
+    "name": "Input Valve",
+    "description" : "Switch between skimmer and drains.",
+    "type" : "pwm",
+    "gpin" : null
+  },{
+    "ID": 5,
+    "name": "Output Valve",
+    "description" : "Switch between sweeper and jets.",
+    "type" : "pwm",
+    "gpin" : null
+  },{
+    "ID": 6,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  },{
+    "ID": 7,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  },{
+    "ID": 8,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  },{
+    "ID": 9,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  },{
+    "ID": 10,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  },{
+    "ID": 11,
+    "name": "",
+    "description" : "",
+    "type" : "",
+    "gpin" : null
+  }]
+}}

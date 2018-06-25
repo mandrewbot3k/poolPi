@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('partials/head') %>
+
+  <body id="<%= pageID %>">
+    <!-- include the navigation bar -->
+    <%- include('partials/nav') %>
+
+    <!-- Page content -->
+    <div class="container mainBody">
+      <h1><%= heading %></h1>
+      <p></p>
+
+
+<hr>
+
+<h1>Control LED light</h1>
+<p><input type="checkbox" id="light"></p>
+
+<script>
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+window.addEventListener("load", function(){ //when page loads
+  var lightbox = document.getElementById("light");
+  lightbox.addEventListener("change", function() { //add event listener for when checkbox changes
+    socket.emit("light", number(this.checked)); //send button status to server (as 1 or 0)
+  });
+});
+socket.on('light', function (data) { //get button status from client
+  document.getElementById("light").checked = data; //change checkbox according to push button on Raspberry Pi
+  socket.emit("light", data); //send push button status to back to server
+});
+</script>
+
+
+<hr>
+
+
+
+    </div>
+
+    <!-- Load js dependencies -->
+    <%- include('partials/bs_scripts') %>
+
+  </body>
+</html>

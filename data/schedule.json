@@ -1,0 +1,19 @@
+{
+  "myschedules" : [{
+    "ID": 1,
+    "name": "Pool Pump",
+    "description": "Summer Hours",
+    "deviceID": "Pool Pump",
+    "startTime": "2018-03-12T13:37:27+00:00",
+    "endTime": "2018-03-12T13:37:27+00:00",
+    "daysofweek": [0,1,2,3,4,5,6]
+  },{
+    "ID": 2,
+    "name": "Pool Pump",
+    "description": "Summer Hours",
+    "deviceID": "1",
+    "startTime": "2018-03-12T13:37:27+00:00",
+    "endTime": "2018-03-12T13:37:27+00:00",
+    "daysofweek": [0,1,2,3,4,5,6]
+  }]
+}
