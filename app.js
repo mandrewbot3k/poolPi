@@ -9,8 +9,6 @@ var configFile = require('./data/config.json');
 //var io = require('socket.io');
 //var Gpio = require('onoff').Gpio;
 
-
-
 //routes
 var indexRouter = require('./routes/index');
 var statusRouter = require('./routes/status');
@@ -19,7 +17,7 @@ var settingsRouter = require('./routes/settings');
 var schedulerRouter = require('./routes/scheduler');
 var controlsRouter = require('./routes/controls');
 
- app = express();
+app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,13 +37,12 @@ app.use('/settings', settingsRouter);
 app.use('/scheduler', schedulerRouter)
 app.use('/controls', controlsRouter)
 
-
 // Set global app variables from data/config.json
 app.locals.siteTitle = configFile.appTitle;
-app.locals.location = configFile.location;
-app.locals.bootswatch = configFile.bootswatch;
-app.locals.bgColor = configFile.bg;
-app.locals.navbarColor = configFile.navbar;
+app.locals.city = configFile.poolinfo.city;
+app.locals.bootswatch = configFile.bs.bootswatch;
+app.locals.bgColor = configFile.bs.bg;
+app.locals.navbarColor = configFile.bs.navbar;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,7 +59,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 module.exports = app;

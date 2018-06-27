@@ -1,7 +1,15 @@
 {
   "appTitle" : "poolPi",
-  "bootswatch" : "cosmo",
-  "navbar" : "dark",
-  "bg" : "primary",
-  "location": "Escalon, CA"
+  "bs":{
+    "_comment": "Bootstrap settings",
+    "bootswatch" : "cosmo",
+    "navbar" : "dark",
+    "bg" : "primary"
+  },
+  "poolinfo": {
+    "city": "Escalon, CA",
+    "degreeUnit": "F",
+    "volume": 20000,
+    "surfacearea": 450
+  }
 }

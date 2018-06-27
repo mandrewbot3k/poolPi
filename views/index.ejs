@@ -10,16 +10,7 @@
     <!-- Page content -->
     <div class="container mainBody" style="width: 100%;">
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-lg-4">
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
-          <div class="card-header text-center">
-            <i id="weatherIcon" class="display-3 wi wi-yahoo-<%= weatherCode %>"></i>
-          <span class="display-2"> <%=weatherTemp %>&deg;<span class="h5"><%= weatherUnit %></span></span>
-        </div>
-        <div class="card-body text-center">
-          <span class="h4"><%= location %></span>
-        </div>
-      </div>
+      <%- include('cards/currentweather') %>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4">
       <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">

@@ -1,21 +1,28 @@
 var schedule = require('node-schedule');
-var myschedules = require(schedule.json);
+var sch = require('../data/schedule.json');
 var express = require('express');
 
 
 //for each myschedule
-daysofweek = [1,3,5];
+sch.forEach(function(item){
+daysofweek = item.daysofweek;
+st = item.startTime;
+console.log(st);
+
+
 // START TIME
   //rules
-  var startrule = new schedule.RecurrenceRule();
-  startrule.hour = $$;
-  startrule.minute = $$;
-  startrule.daysofweek = daysofweek
-
+  var startrule = []; //new schedule.RecurrenceRule();
+  startrule.hour = st.h;
+  startrule.minute = st.m;
+  startrule.daysofweek = daysofweek;
+  console.log(startrule);
+}
+/*
   //action
   var j = schedule.scheduleJob(rule, function(){
     console.log('schedule!');
-  });
+  });*/
 
 //END TIME
 
