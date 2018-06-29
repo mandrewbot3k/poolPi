@@ -34,7 +34,11 @@ socket.on('light', function (data) { //get button status from client
 
 
 <hr>
-
+<table class="table">
+  <%- deviceTypes.forEach(function(type) { %>
+   <tr><%= type.key %></tr>
+   <% }); %>
+</table>
 
 
     </div>

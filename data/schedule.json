@@ -3,16 +3,18 @@
     "name": "Pool Pump",
     "description": "Summer Hours",
     "deviceID": "1",
-    "startTime": {"h" : 8, "m": 0},
-    "endTime": {"h" : 10, "m": 0},
-    "daysofweek": [0,1,2,3,4,5,6]
+    "startTime": {"h" : 7, "m": 22},
+    "endTime": {"h" : 7, "m": 23},
+    "daysofweek": [0,1,2,3,4,5,6],
+    "action": "Notify"
   },{
     "ID": 2,
     "name": "Pool Pump",
     "description": "Summer Hours",
     "deviceID": "1",
-    "startTime": {"h" : 8, "m": 0},
-    "endTime": {"h" : 10, "m": 0},
-    "daysofweek": [0,1,2,3,4,5,6]
+    "startTime": {"h" : 7, "m": 20},
+    "endTime": {"h" : 7, "m": 21},
+    "daysofweek": [0,1,2,3,4,5,6],
+    "action": "onoff"
   }
 ]
