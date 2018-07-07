@@ -20,12 +20,12 @@ In it's current state, most of the system is being ran in the background with li
 ## Software
 - Raspbian Stretch 
 - node.js 
- - express
- - johnny-five
- - raspi-iodate-time
- - node-schedule
- - weather-js
- - socket.io
+  - express
+  - johnny-five
+  - raspi-iodate-time
+  - node-schedule
+  - weather-js
+  - socket.io
 - Twitter Bootstrap 4
 
 Likely to be implemented
