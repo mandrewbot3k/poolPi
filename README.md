@@ -1,7 +1,8 @@
 # poolPi
-## WORK IN PROGRESS...
 
-This is first project using node.js. It's a local application server that will be used as a timer for my pool pump and lighting in my backyard with a Raspberry Pi Zero W.
+** WORK IN PROGRESS...**
+
+This is first project using node.js. It's a local application server that will be used as a timer for my pool pump and lighting in my backyard with a Raspberry Pi Zero W. While I could've used Cayenne to have this up and running quickly, I wanted a local network server.
 
 While I'm using this for my pool equipment, the Johnny-Five library has been implemented so expansion to other devices should be fairly easy. I plan to add additional valve solenoids and some sensors for reporting later on. 
 
@@ -45,10 +46,14 @@ The system relies on a handful of JSON files in the data directory for configura
 Coming Soon...
 
 ### Configuring the server
+Coming Soon...
 
 ### Configuring Devices
+Coming Soon...
 
 ### Setting the Timer schedule
+Coming Soon...
 
 ## Using the API
+Coming Soon...
 
