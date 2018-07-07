@@ -1,5 +1,6 @@
 node_modules/
-/.DS_Store
-/._.DS_Store
-/package-lock.json
-/._.package-lock.json
+.DS_Store
+._.DS_Store
+package-lock.json
+._.package-lock.json
+._*

@@ -8,6 +8,8 @@
   },
   "poolinfo": {
     "city": "Escalon, CA",
+    "timezone": 0,
+    "daylightSavings": 1,
     "degreeUnit": "F",
     "volume": 20000,
     "surfacearea": 450

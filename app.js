@@ -1,13 +1,13 @@
+require('console-stamp')(console, 'mm/dd/yy HH:MM:ss');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var onoff = require('onoff').Gpio;
+//var onoff = require('onoff').Gpio;
 var configFile = require('./data/config.json');
-//var myschedules = require('./data/node-schedule.js');
-//var io = require('socket.io');
-//var Gpio = require('onoff').Gpio;
+var io = require('socket.io');
+var myschedules = require('./data/node-schedule');
 
 //routes
 var indexRouter = require('./routes/index');
@@ -16,6 +16,7 @@ var usersRouter = require('./routes/users');
 var settingsRouter = require('./routes/settings');
 var schedulerRouter = require('./routes/scheduler');
 var controlsRouter = require('./routes/controls');
+var gpioRouter = require('./routes/gpio');
 
 app = express();
 
@@ -29,13 +30,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //views
 app.use('/', indexRouter);
 app.use('/status', statusRouter)
 app.use('/users', usersRouter);
 app.use('/settings', settingsRouter);
-app.use('/scheduler', schedulerRouter)
-app.use('/controls', controlsRouter)
+app.use('/scheduler', schedulerRouter);
+app.use('/controls', controlsRouter);
+app.use('/gpio', gpioRouter);
+
+// Set the setTimers
+var poolTimer = myschedules.setTimers();
 
 // Set global app variables from data/config.json
 app.locals.siteTitle = configFile.appTitle;

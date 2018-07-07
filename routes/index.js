@@ -23,7 +23,7 @@ var getWeather = function (req, res, next){
       setTimeout(function(){
         console.log("Waiting on the weather...");
         next();
-      },1000);
+      },300);
 
     };
 

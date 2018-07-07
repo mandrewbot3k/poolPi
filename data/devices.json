@@ -1,89 +1,51 @@
 {
-  "devices":{
-  "types" : [{
-    "relay" : {
-      "iodir" : "out",
-      "defaultValue" : "low"
-    },
-    "button":{
-      "iodir": "in",
-      "defaultValue": "low"
-    },
-    "led": {
-      "iodir": "out",
-      "defaultValue": "low"
-    },
-    "sensor": {
-      "iodir" : "in",
-      "defaultValue": 0
-    }
-
-  }],
-  "mydevices" : [{
+  "devices": [{
     "ID": 1,
     "name": "Pool Pump",
     "description": "Jandy Pool Pump",
-    "type": "relay" ,
-    "gpin": 4
+    "type": "Relay" ,
+    "gpin": 7
   },{
     "ID": 2,
     "name": "Pool Light",
     "description" : "Pool Light",
-    "type" : "relay",
-    "gpin" : 17
+    "type" : "Relay",
+    "gpin" : 11
   },{
     "ID": 3,
     "name": "Yard Lights",
     "description" : "Pole lights around the Pool.",
-    "type" : "relay",
-    "gpin" : null
+    "type" : "Relay",
+    "gpin" : 13
   },{
     "ID": 4,
     "name": "Input Valve",
     "description" : "Switch between skimmer and drains.",
-    "type" : "pwm",
-    "gpin" : null
+    "type" : "Relay",
+    "gpin" : 15
   },{
     "ID": 5,
     "name": "Output Valve",
     "description" : "Switch between sweeper and jets.",
-    "type" : "pwm",
-    "gpin" : null
+    "type" : "Relay",
+    "gpin" : 16
   },{
     "ID": 6,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
+    "name": "Pool Light Button",
+    "description" : "Input to manually turn on pool lights (1 hour timer)",
+    "type" : "Button",
+    "gpin" : 18
   },{
     "ID": 7,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
+    "name": "Yard Lights Button",
+    "description" : "Input to manually turn on lights (30 minute timer) ",
+    "type" : "Button",
+    "gpin" : 21
   },{
     "ID": 8,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
-  },{
-    "ID": 9,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
-  },{
-    "ID": 10,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
-  },{
-    "ID": 11,
-    "name": "",
-    "description" : "",
-    "type" : "",
-    "gpin" : null
+    "name": "Pool Pump Button",
+    "description" : "Input to turn on the pool pump (1 hour timer)",
+    "type" : "Button",
+    "gpin" : 22
   }]
-}}
+}

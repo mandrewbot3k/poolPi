@@ -6,17 +6,21 @@ var deviceTypes, mineDevices;
 
 var types = function(req, res, next){
   // list all device types
-  devs.devices.types.forEach(function(deviceTypes){
-
+  devs.devices.types.forEach(function(item){
+    deviceTypes = item;
     console.log(deviceTypes);
   });
 
   // list all devices
-  devs.devices.mydevices.forEach(function(mineDevices){
+  devs.devices.mydevices.forEach(function(item){
     //if(err) console.log(err);
+    mineDevices = item;
     console.log(mineDevices);
   })
-  next();
+  setTimeout(function(){
+    console.log("Waiting on the devices...");
+    next();
+  },1000);
 };
 
 router.use(types);
@@ -27,8 +31,8 @@ router.get('/', function(req, res, next) {
       title: 'poolPi',
       heading: 'Controls',
       pageID: 'controls',
-      myDevices: mineDevices,
-      deviceTypes: deviceTypes
+      mineDevices: devs
+
 });
 
 });
