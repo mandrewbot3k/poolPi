@@ -57,3 +57,8 @@ Coming Soon...
 ## Using the API
 Coming Soon...
 
+
+## Other Feature Ideas
+- Pool Level
+  - Use a 24V valve to fill the pool periodically during the summer.
+
