@@ -8,7 +8,7 @@ While I'm using this for my pool equipment, the Johnny-Five library has been imp
 
 The system does not use a central database, but rather several JSON files to hold configurations. This will likely be updated in the future as the front end is developed more. 
 
-In it's current state, most of the system is being ran in the background with little to 
+Currently the front end is featureless with the backend doing all of the work. 
 
 ## Hardware
 - Pi Zero W (headless)
@@ -23,10 +23,12 @@ In it's current state, most of the system is being ran in the background with li
 - node.js 
   - express
   - johnny-five
-  - raspi-iodate-time
+  - raspi-io
+  - date-time
   - node-schedule
   - weather-js
   - socket.io
+  - needle
 - Twitter Bootstrap 4
 
 Likely to be implemented
@@ -61,4 +63,8 @@ Coming Soon...
 ## Other Feature Ideas
 - Pool Level
   - Use a 24V valve to fill the pool periodically during the summer.
+- Add actuators to 3-way Jandy Valves for changing input/output plumbing
+- Add pressure transducer on filter for pressure warnings (filter change needed) and automatic shutoff
+- Add air bleed valve
+- Add valve for emptying pool/filter
 
