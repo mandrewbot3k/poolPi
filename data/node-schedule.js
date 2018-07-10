@@ -12,7 +12,7 @@ app = express();
 console.log('Schedules Loading...');
 console.log('Local Time: ' + dateTime());
 
-// Loop through the schedules
+// Loop through all of the schedules - check for enabled later to hold index true
 module.exports = {
  setTimers: function(req, res){
 
@@ -30,16 +30,19 @@ module.exports = {
     devID = item.deviceID;
 
     // create reference to johnny-five object
+    // Find in the array
     var a = locateID.indexOf(devID);
     var devType = myDs.myDevices[a].type;
     var devPin = toString(myDs.myDevices[a].gpin);
 
     console.log("[" + item.ID + "]" +item.description +":");
 
+// check if schedule is enabled
 if(item.enabled == 1){
 //RULES
   // START TIME
     //rules
+    // if timer is not autoOff, run the start rule, else skip start rule
     if(item.timertype != "autoOff"){
       // Set start time
       var startrule = new schedule.RecurrenceRule();
@@ -50,26 +53,27 @@ if(item.enabled == 1){
       if (startrule.minute == 0){displayStartMin = "00"}
       else {displayStartMin = startrule.minute};
       console.log("Timer Start: " + startrule.hour + ":" + displayStartMin);
-      // Add Start Action here
-      var j = schedule.scheduleJob(startrule, function(){
 
-        // set the host name for path
-        var host = 'http://' + req.headers.host;
-        var api = '/gpio';
+          // Add Start Action here
+          var j = schedule.scheduleJob(startrule, function(){
 
-        var j5 = '/' + devPin + '/' + devType +'/';
-        var j5fun = 'on';
-        var str = api + j5 + j5fun;
-        var url = host + str;
+            // set the host name for path
+            var host = 'http://' + req.headers.host;
+            var api = '/gpio';
 
-        // post command to GPIO API
-        needle.post(url, {}, function(err, resp){
-          if(err){console.log(err)};
-          //console.log(resp);
-        })
+            var j5 = '/' + devPin + '/' + devType +'/';
+            var j5fun = 'on';
+            var str = api + j5 + j5fun;
+            var url = host + str;
 
-        console.log('Turning ON: ' + item.name + ' ' + item.description + ' w/Start Rule: #' + item.ID + ' at ' + dateTime());
-        });
+            // post command to GPIO API
+            needle.post(url, {}, function(err, resp){
+              if(err){console.log(err)};
+              //console.log(resp);
+            })
+
+            console.log('Turning ON: ' + item.name + ' ' + item.description + ' w/Start Rule: #' + item.ID + ' at ' + dateTime());
+          });
     };
      //end != autoOff if
 
@@ -82,26 +86,27 @@ if(item.enabled == 1){
       if (endrule.minute == 0){displayEndMin = "00"}
       else {displayEndMin = endrule.minute};
       console.log("Timer End: " + endrule.hour +":"+ displayEndMin);
-      // Add end action here
-      var j = schedule.scheduleJob(endrule, function(){
 
-        // set the host name for path
-        var host = 'http://' + req.headers.host;
-        var api = '/gpio';
-        // /gpio/7/Relay/toggle
-        var j5 = '/' + devPin + '/' + devType +'/';
-        var j5fun = 'off';
-        var str = api + j5 + j5fun;
-        var url = host + str;
+          // Add end action here
+          var j = schedule.scheduleJob(endrule, function(){
 
-        // post command to GPIO API
-        needle.post(url, {}, function(err, resp){
-          if(err){console.log(err)};
-          //console.log(resp);
-        })
-      
-        console.log('Turning OFF ' + item.name + ' ' + item.description + ' w/End Rule: #' + item.ID + ' at '  + dateTime());
-        });
+            // set the host name for path
+            var host = 'http://' + req.headers.host;
+            var api = '/gpio';
+            // /gpio/7/Relay/toggle
+            var j5 = '/' + devPin + '/' + devType +'/';
+            var j5fun = 'off';
+            var str = api + j5 + j5fun;
+            var url = host + str;
+
+            // post command to GPIO API
+            needle.post(url, {}, function(err, resp){
+              if(err){console.log(err)};
+              //console.log(resp);
+            })
+
+            console.log('Turning OFF ' + item.name + ' ' + item.description + ' w/End Rule: #' + item.ID + ' at '  + dateTime());
+          });
   }; //end if
   });
 }};
