@@ -5,6 +5,10 @@ var dateTime = require('date-time');
 var configFile = require('../data/config.json');
 const myDs = require('../data/devices.json');
 const needle = require('needle');
+const hostn = 'http://poolPi:';
+const port = '3000';
+const host = hostn + port;
+
 
 app = express();
 
@@ -33,7 +37,7 @@ module.exports = {
     // Find in the array
     var a = locateID.indexOf(devID);
     var devType = myDs.myDevices[a].type;
-    var devPin = toString(myDs.myDevices[a].gpin);
+    var devPin = String(myDs.myDevices[a].gpin);
 
     console.log("[" + item.ID + "]" +item.description +":");
 
@@ -50,15 +54,12 @@ if(item.enabled == 1){
       startrule.minute = st.m;
       startrule.daysofweek = daysofweek;
       // Log the time set and fix minutes for log display:
-      if (startrule.minute == 0){displayStartMin = "00"}
+      if (startrule.minute == 0){displayStartMin = "0"+startrule.minute;}
       else {displayStartMin = startrule.minute};
       console.log("Timer Start: " + startrule.hour + ":" + displayStartMin);
 
           // Add Start Action here
           var j = schedule.scheduleJob(startrule, function(){
-
-            // set the host name for path
-            var host = 'http://' + req.headers.host;
             var api = '/gpio';
 
             var j5 = '/' + devPin + '/' + devType +'/';
@@ -83,15 +84,12 @@ if(item.enabled == 1){
       endrule.minute = et.m;
       endrule.daysofweek = daysofweek;
       // Log the time set and fix minutes for log display:
-      if (endrule.minute == 0){displayEndMin = "00"}
+      if (endrule.minute == 0){displayEndMin = "0" + endrule.minute;}
       else {displayEndMin = endrule.minute};
       console.log("Timer End: " + endrule.hour +":"+ displayEndMin);
 
           // Add end action here
           var j = schedule.scheduleJob(endrule, function(){
-
-            // set the host name for path
-            var host = 'http://' + req.headers.host;
             var api = '/gpio';
             // /gpio/7/Relay/toggle
             var j5 = '/' + devPin + '/' + devType +'/';

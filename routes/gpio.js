@@ -60,7 +60,7 @@ devicesDB.myDevices.forEach(function(item){
 
      // place device object in array at position equal to it's pin number
      devices[item.gpin] = this[devType+devPin];
-     console.log(devices[item.pin] )
+     //console.log(devices[item.gpin] )
 });
 
 console.log('deviceDB json: '+ JSON.stringify(devicesDB));
@@ -85,7 +85,8 @@ var trigger = {
     var type = req.params.type;
     var pin = req.params.pin;
     var onoff = req.params.onoff;
-    console.log(devices[pin]);
+    //console.log(devices[pin]);
+
     // send off to trigger pin using trigger functions. allows for additional
     // functions or custom macros. This is the preffered method.
     trigger[onoff](devices[pin]);
