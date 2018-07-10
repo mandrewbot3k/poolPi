@@ -10,9 +10,21 @@
     <!-- Page content -->
     <div class="container mainBody">
       <h1><%= title %></h1>
+    <p>Use the following API calls for use:</p>
+      <H4>Get Status</H4>
+      <p>Get the status by using GET: http://host:3000/gpio/PIN
+      Where PIN is the pin number. Returns block.</p>
+      <h4>Trigger Device</h4>
+      <p>To trigger a device, use POST: http://host:3000/gpio/{PIN}/{TYPE}/{ONOFF}
+      where domains for each value are: </p>
+      <ul>
+      <li>PIN: <i> GPIO Pin number</i> </li>
+      <li>TYPE: <i> Relay </i>| <i> Button</i> </li>
+      <li>ONOFF: <i> on </i>| <i> off </i>| <i> toggle</i> </li>
+      </ul>
+
+
     </div>
-    <%= title %>
-    <%- body %>
     <!-- Load js dependencies -->
     <%- include('partials/bs_scripts') %>
 

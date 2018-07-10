@@ -1,9 +1,9 @@
 {
-  "devices": [{
+  "myDevices": [{
     "ID": 1,
     "name": "Pool Pump",
     "description": "Jandy Pool Pump",
-    "type": "Relay" ,
+    "type": "Relay",
     "gpin": 7
   },{
     "ID": 2,
