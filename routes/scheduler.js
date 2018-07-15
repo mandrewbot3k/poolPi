@@ -4,8 +4,10 @@ var sch = require('../data/schedule.json');
 var dateTime = require('date-time');
 var configFile = require('../data/config.json');
 
+var schedule = sch.mySchedules;
+
 app = express();
-console.log('hello from the scheduler');
+//console.log('hello from the scheduler');
 
 var timezone = configFile.poolinfo.timezone;
 
@@ -17,7 +19,8 @@ router.get('/', function(req, res, next) {
   res.render('scheduler', {
     title: 'poolPi Scheduler',
     heading: 'Scheduler',
-    pageID: 'scheduler'
+    pageID: 'scheduler',
+    schedule: schedule
   });
 });
 

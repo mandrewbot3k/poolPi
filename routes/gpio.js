@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const devicesDB = require('../data/devices.json');
+const filter = require('lodash.filter');
 
 const five = require('johnny-five')
 const raspi = require('raspi-io');
@@ -46,6 +47,10 @@ var devicesDB = [
 // create an array to store device objects in to call from
 var devices = [];
 
+// Get the relays
+var relayStatus = filter(devicesDB.myDevices, { type: 'Relay' });
+
+
 //initialize the johnny-five board
 board.on("ready", function() {
 
@@ -63,8 +68,8 @@ devicesDB.myDevices.forEach(function(item){
      //console.log(devices[item.gpin] )
 });
 
-console.log('deviceDB json: '+ JSON.stringify(devicesDB));
-console.log('devices array: '+ devices);
+//console.log('deviceDB json: '+ JSON.stringify(devicesDB));
+//console.log('devices array: '+ devices);
 
 var trigger = {
   toggle: (device) => {
@@ -97,7 +102,6 @@ var trigger = {
 
   router.get('/:pin', function(req, res, next){
     if (isNaN(parseInt(req.params.pin))){
-      console.log(parseInt(req.params.pin));
       next();
     }
     else {
@@ -111,6 +115,17 @@ var trigger = {
         'status': grabDevice.isOn
       });
     }
+  });
+
+  router.get('/pinstatus', function(req, res, next){
+    var ds = [];
+    relayStatus.forEach(function(item){
+      var d = this[item.type+item.gpin.toString()];
+      ds[item.gpin] = d.isOn;
+      console.log(ds[item.gpin]);
+    })
+
+    res.send(ds);
   });
 
 

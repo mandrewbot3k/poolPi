@@ -2,12 +2,17 @@ var express = require('express');
 var router = express.Router();
 var weather = require('weather-js');
 var configFile = require('../data/config.json');
+const devicesDB = require('../data/devices.json');
 
-var city, weatherUnit, weatherTemp, weatherCode, weatherDesc, weatherFeel, windSpeed, windDisplay;
+const filter = require('lodash.filter');
+
+var city, weatherUnit, weatherTemp, weatherCode, weatherDesc, weatherFeel, windSpeed, windDisplay, devicestats;
 city = configFile.poolinfo.city;
 degreeUnit = configFile.poolinfo.degreeUnit;
 
 app = express();
+
+var devicestats = filter(devicesDB.myDevices, { type: 'Relay' });
 
 /* go get the weather function */
 var getWeather = function (req, res, next){
@@ -46,7 +51,8 @@ router.get('/', function(req, res, next) {
       weatherDesc: weatherDesc,
       weatherFeel: weatherFeel,
       windSpeed: windSpeed,
-      windDisplay: windDisplay
+      windDisplay: windDisplay,
+      devicestats: devicestats
     });
 });
 

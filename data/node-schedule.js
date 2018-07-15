@@ -5,6 +5,7 @@ var dateTime = require('date-time');
 var configFile = require('../data/config.json');
 const myDs = require('../data/devices.json');
 const needle = require('needle');
+
 const hostn = 'http://poolPi:';
 const port = '3000';
 const host = hostn + port;

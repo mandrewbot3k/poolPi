@@ -5,3 +5,5 @@ package-lock.json
 ._.package-lock.json
 ._*
 /data/*.json
+/archive
+archive*

@@ -2,7 +2,7 @@
   "appTitle" : "poolPi",
   "bs":{
     "_comment": "Bootstrap settings",
-    "bootswatch" : "cosmo",
+    "bootswatch" : "darkly",
     "navbar" : "dark",
     "bg" : "primary"
   },

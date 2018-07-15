@@ -1,0 +1,19 @@
+<% days=["Su","M","Tu","W","Th","F","Sa"]; %>
+
+<tr>
+  <td><%= item.ID %></td>
+  <td><%= item.name %></td>
+  <td><%= item.description %></td>
+  <td><%= item.deviceID%></td>
+  <td><input <% if(item.enabled == 1){%> checked="true" <%}; %> type="checkbox" disabled ></input></td>
+  <td><%if(item.timertype=="autoOff"){%>
+        n/a
+          <%}else{%>
+            <%= String(item.startTime.h)+ ':'%><%if(String(item.startTime.m).length == 1){%><%='0'+String(item.startTime.m)%><%}else{%><%=item.startTime.m%><%}}%>
+    </td>
+    <td><%= String(item.endTime.h)+ ':'%><%if(String(item.endTime.m).length == 1){%><%='0'+String(item.endTime.m)%><%}else{%><%=item.endTime.m%><%}%>
+    </td>
+
+  <td><% item.daysofweek.forEach(function(ind){%><%=days[ind]%>.<%})%></td>
+  <td><%= item.timertype%></td>
+</tr>

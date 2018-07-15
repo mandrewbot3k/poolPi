@@ -19,33 +19,33 @@
     "gpin" : 13
   },{
     "ID": 4,
-    "name": "Input Valve",
-    "description" : "Switch between skimmer and drains.",
+    "name": "TEST",
+    "description" : "Pole lights around the Pool.",
     "type" : "Relay",
     "gpin" : 15
   },{
     "ID": 5,
-    "name": "Output Valve",
-    "description" : "Switch between sweeper and jets.",
+    "name": "TEST",
+    "description" : "Pole lights around the Pool.",
     "type" : "Relay",
     "gpin" : 16
   },{
-    "ID": 6,
+    "ID": 10,
     "name": "Pool Light Button",
     "description" : "Input to manually turn on pool lights (1 hour timer)",
     "type" : "Button",
-    "gpin" : 18
+    "gpin" : 29
   },{
-    "ID": 7,
+    "ID": 11,
     "name": "Yard Lights Button",
     "description" : "Input to manually turn on lights (30 minute timer) ",
     "type" : "Button",
-    "gpin" : 21
+    "gpin" : 31
   },{
-    "ID": 8,
+    "ID": 12,
     "name": "Pool Pump Button",
     "description" : "Input to turn on the pool pump (1 hour timer)",
     "type" : "Button",
-    "gpin" : 22
+    "gpin" : 33
   }]
 }
