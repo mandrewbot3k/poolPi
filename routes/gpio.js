@@ -1,11 +1,21 @@
+// modules
 var express = require('express');
-var router = express.Router();
-const devicesDB = require('../data/devices.json');
-const filter = require('lodash.filter');
-
 const five = require('johnny-five')
 const raspi = require('raspi-io');
+const filter = require('lodash.filter');
+const io = require('socket.io-client');
 
+//files
+const devicesDB = require('../data/devices');
+
+// shortcuts
+var router = express.Router();
+const hostn = 'http://poolPi:';
+const port = '3000';
+const host = hostn + port;
+const socket = io.connect(host);
+
+// globals
 const board = new five.Board({
       repl: false,
       io: new raspi(),
@@ -42,7 +52,9 @@ var devicesDB = [
 ];
 */
 
-
+socket.on('connect', () => {
+  console.log(socket.id); // 'G5p5...'
+});
 
 // create an array to store device objects in to call from
 var devices = [];
@@ -86,11 +98,18 @@ var trigger = {
 /* GET home page. */
   router.post('/:pin/:type/:onoff', function(req, res){
     //type can be Relay, Led, Button
-    //onoff can be on, off, toggle
+    //onoff can be on, off, toggle (toggle not fully supported with socket.io)
     var type = req.params.type;
     var pin = req.params.pin;
     var onoff = req.params.onoff;
-    //console.log(devices[pin]);
+    grabDevice = devices[pin]
+    var toggleStatus = !grabDevice.isOn;
+    // websocket through socket.io
+    var msg;
+    if(onoff == "on"){msg = true}else if(onoff == "off"){msg=false}else{msg=toggleStatus};
+    socket.emit("pinChange", {"pin": parseInt(pin), "method": onoff, "status": msg}); //send button status to server
+
+
 
     // send off to trigger pin using trigger functions. allows for additional
     // functions or custom macros. This is the preffered method.
@@ -125,7 +144,7 @@ var trigger = {
       console.log(ds[item.gpin]);
     })
 
-    res.send(ds);
+    res.send({'ds': ds});
   });
 
 

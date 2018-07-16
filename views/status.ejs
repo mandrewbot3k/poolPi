@@ -7,37 +7,73 @@
 <script>
 // get ready
 $(function(){
+  var socket = io(); //load socket.io-client and connect to the host that serves the page
+
+  // define pinstatus API
+  var pinValue;
+  var statusUrl;
+  hostn = 'poolPi';
+  var getStatus = '/gpio/pinstatus';
+  statusUrl = 'http://' + hostn +  ':3000' +  getStatus;
+
+ // Get the current pin status and change button display
+  $.get(statusUrl, function(data) {
+    data.ds.forEach(function(item, index){
+      if(item == true){
+        turnOn('#btn'+index,'');
+      }
+    })
+  });
+
   var btnDeviceOn = "border-success";
   var btnDeviceOff = "border-danger"
   var onoffDeviceOn = "text-success";
   var onoffDeviceOff = "text-danger"
 
-  function turnOff(currID, currOnoff){
+  function turnOff(currID){
     $(currID).removeClass(btnDeviceOn).addClass(btnDeviceOff);
     $(currID + " i").removeClass(onoffDeviceOn).addClass(onoffDeviceOff);
-    $(currOnoff).html("OFF").removeClass(onoffDeviceOn).addClass(onoffDeviceOff);
+    $(currID + "> span").html("OFF").removeClass(onoffDeviceOn).addClass(onoffDeviceOff);
     $(currID).attr("data-pinstate", "false");
   };
 
-  function turnOn(currID, currOnoff){
+  function turnOn(currID){
     $(currID).removeClass(btnDeviceOff).addClass(btnDeviceOn);
     $(currID + " i").removeClass(onoffDeviceOff).addClass(onoffDeviceOn);
-    $(currOnoff).html("ON").removeClass(onoffDeviceOff).addClass(onoffDeviceOn);
+    $(currID + "> span").html("ON").removeClass(onoffDeviceOff).addClass(onoffDeviceOn);
     $(currID).attr("data-pinstate", "true");
+
   }
+
+// receive pinChange info from server
+  socket.on('pinChange', function(data){
+    console.log("socket here: " + JSON.stringify(data));
+    if(data.status == true){
+      console.log(('#btn'+String(data.pin)))
+      turnOn('#btn'+String(data.pin));
+    }
+    else{
+      turnOff('#btn'+String(data.pin));
+    }
+  })
 
   //post on click
   $( "Button" ).on("click", function(){
 
      var currID = "#" + $(this).attr("ID");
-     var currOnoff = "#onoff" + $(this).data("pin")
       var state =  $(currID).attr("data-pinstate");
-     console.log(state);
+     //console.log(state);
 
      var url = './gpio/' + $(this).data('pin') + '/' + $(this).data('type') + '/toggle';
       $.post(url, function(){
-            if(state == "false"){turnOn(currID, currOnoff);}
-            else{turnOff(currID, currOnoff);}
+            if(state == "false"){
+              turnOn(currID);
+            //  socket.emit("pinChange", {"pin": $(currID).data("pin"), "status": true}); //send button status to server
+            }
+            else{
+              turnOff(currID);
+              //socket.emit("pinChange", {"pin": $(currID).data("pin"), "status": false}); //send button status to server
+            }
           })
         .fail(function(){
           console.log("POST action failed");
@@ -50,24 +86,9 @@ $(function(){
   })
 })
 
-var socket = io(); //load socket.io-client and connect to the host that serves the page
+
 
 </script>
-
-<script>
-window.addEventListener("load", function(){ //when page loads
-  var lightbox = document.getElementById("light");
-  lightbox.addEventListener("click", function() { //add event listener for when checkbox changes
-    socket.emit("light", number(this.checked)); //send button status to server (as 1 or 0)
-  });
-});
-socket.on('light', function (data) { //get button status from client
-  document.getElementById("light").checked = data; //change checkbox according to push button on Raspberry Pi
-  socket.emit("light", data); //send push button status to back to server
-});
-</script>
-
-
 
 
   <body id="<%= pageID %>">

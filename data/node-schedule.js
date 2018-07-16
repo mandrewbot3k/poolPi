@@ -1,16 +1,22 @@
-var schedule = require('node-schedule');
-var sch = require('../data/schedule.json');
-var express = require('express');
-var dateTime = require('date-time');
-var configFile = require('../data/config.json');
-const myDs = require('../data/devices.json');
+// modules
+const ns = require('node-schedule');
+const express = require('express');
+const dateTime = require('date-time');
 const needle = require('needle');
 
+
+// files
+const sch = require('../data/schedule');
+const configFile = require('../data/config');
+const myDs = require('../data/devices');
+
+// globals
 const hostn = 'http://poolPi:';
 const port = '3000';
 const host = hostn + port;
 
 
+// shortcuts
 app = express();
 
 // Alert the scehdule is loading and show timezone
@@ -50,7 +56,7 @@ if(item.enabled == 1){
     // if timer is not autoOff, run the start rule, else skip start rule
     if(item.timertype != "autoOff"){
       // Set start time
-      var startrule = new schedule.RecurrenceRule();
+      var startrule = new ns.RecurrenceRule();
       startrule.hour = st.h;
       startrule.minute = st.m;
       startrule.daysofweek = daysofweek;
@@ -60,7 +66,7 @@ if(item.enabled == 1){
       console.log("Timer Start: " + startrule.hour + ":" + displayStartMin);
 
           // Add Start Action here
-          var j = schedule.scheduleJob(startrule, function(){
+          var j = ns.scheduleJob(startrule, function(){
             var api = '/gpio';
 
             var j5 = '/' + devPin + '/' + devType +'/';
@@ -80,7 +86,7 @@ if(item.enabled == 1){
      //end != autoOff if
 
     //End Time
-      var endrule = new schedule.RecurrenceRule();
+      var endrule = new ns.RecurrenceRule();
       endrule.hour = et.h;
       endrule.minute = et.m;
       endrule.daysofweek = daysofweek;
@@ -90,7 +96,7 @@ if(item.enabled == 1){
       console.log("Timer End: " + endrule.hour +":"+ displayEndMin);
 
           // Add end action here
-          var j = schedule.scheduleJob(endrule, function(){
+          var j = ns.scheduleJob(endrule, function(){
             var api = '/gpio';
             // /gpio/7/Relay/toggle
             var j5 = '/' + devPin + '/' + devType +'/';

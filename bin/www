@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('poolPi:server');
 var http = require('http');
-
+const needle = require('needle');
 
 
 /**
@@ -30,14 +30,14 @@ var io = require('socket.io')(server);
 
 // Use devices.json to create connections
 
-io.sockets.on('connection', function (socket) {// WebSocket Connection
-  var lightvalue = 0; //static variable for current status
-  socket.on('light', function(data) { //get light switch status from client
-    lightvalue = data;
-    if (lightvalue) {
-      console.log(lightvalue); //turn LED on or off, for now we will just show it in console.log
-    }
+io.on('connection', function (socket) {// WebSocket Connection
+
+  socket.on('pinChange', function(data) { //get device status from client
+      console.log(data); //turn LED on or off, for now we will just show it in console.log
+      io.emit('pinChange', data);
+
   });
+
 });
 
 /**
