@@ -1,17 +1,18 @@
-var express = require('express');
+// modules
+const express = require('express');
+const dateTime = require('date-time');
+
+// files
+var configFile = require('../data/config');
+var sch = require('../data/schedule');
+
+//shortcuts
 var router = express.Router();
-var sch = require('../data/schedule.json');
-var dateTime = require('date-time');
-var configFile = require('../data/config.json');
-
-var schedule = sch.mySchedules;
-
 app = express();
-//console.log('hello from the scheduler');
 
+//globals
+var schedule = sch.mySchedules;
 var timezone = configFile.poolinfo.timezone;
-
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

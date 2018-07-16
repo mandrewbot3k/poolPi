@@ -1,11 +1,18 @@
+// modules
 var express = require('express');
-var router = express.Router();
 var weather = require('weather-js');
-var configFile = require('../data/config.json');
 
+// files
+var configFile = require('../data/config');
+
+//shortcuts
+var router = express.Router();
+app = express();
+
+// globals
 var city, weatherUnit, weatherTemp, weatherCode, weatherDesc, weatherFeel, windSpeed, windDisplay;
 city = configFile.poolinfo.city;
-app = express();
+degreeUnit = configFile.poolinfo.degreeUnit;
 
 var getWeather = function (req, res, next){
     weather.find({search: city, degreeType: degreeUnit}, function(err, result) {
@@ -18,20 +25,22 @@ var getWeather = function (req, res, next){
        windSpeed = result[0]['current']['winddisplay'],
        windDisplay = result[0]['current']['windspeed']
           console.log("It's currently "+ weatherTemp + " " + weatherUnit + " in " + city + " but feels like " + weatherFeel + weatherUnit);
-          console.log("#dev from home page");
+          console.log("#dev from status page");
       });
       setTimeout(function(){
         console.log("Waiting on the weather...");
         next();
-      },300);
+      },1000);
 
     };
 
+
 /* go get the weather! */
-router.use(getWeather);
+router.use(/^\/(?!gpio).*/, getWeather);
+
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res, next){
   res.render('index', {
       title: 'poolPi',
       heading: 'Home',
@@ -46,5 +55,6 @@ router.get('/', function(req, res, next) {
       windDisplay: windDisplay
     });
 });
+
 
 module.exports = router;

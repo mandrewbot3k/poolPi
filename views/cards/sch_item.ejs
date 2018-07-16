@@ -5,7 +5,7 @@
   <td><%= item.name %></td>
   <td><%= item.description %></td>
   <td><%= item.deviceID%></td>
-  <td><input <% if(item.enabled == 1){%> checked="true" <%}; %> type="checkbox" disabled ></input></td>
+  <td class="form-check"><input class="form-check-input" <% if(item.enabled == 1){%> checked="true" <%}; %> type="checkbox" disabled ></input></td>
   <td><%if(item.timertype=="autoOff"){%>
         n/a
           <%}else{%>
@@ -14,6 +14,6 @@
     <td><%= String(item.endTime.h)+ ':'%><%if(String(item.endTime.m).length == 1){%><%='0'+String(item.endTime.m)%><%}else{%><%=item.endTime.m%><%}%>
     </td>
 
-  <td><% item.daysofweek.forEach(function(ind){%><%=days[ind]%>.<%})%></td>
+  <td><% item.daysofweek.forEach(function(i){%><%=days[i]%>.<%})%></td>
   <td><%= item.timertype%></td>
 </tr>

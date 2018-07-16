@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('partials/head') %>
+
+  <body id="<%= pageID %>">
+    <!-- include the navigation bar -->
+    <%- include('partials/nav') %>
+
+    <!-- Page content -->
+    <div class="container mainBody">
+      <h1>Current Schedules</h1>
+      <table class='table table-striped'>
+        <thead>
+          <th>Program #</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>DeviceID</th>
+          <th>Enabled</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Days</th>
+          <th>Type</th>
+        </thead>
+      <% schedule.forEach(function(item){ %>
+        <%- include('cards/sch_item', {item: item}) %>
+      <% }); %>
+    </table>
+    </div>
+
+    <!-- Load js dependencies -->
+    <%- include('partials/bs_scripts') %>
+
+  </body>
+</html>
