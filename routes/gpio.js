@@ -1,5 +1,6 @@
 // modules
 var express = require('express');
+const needle = require('needle');
 const five = require('johnny-five')
 const raspi = require('raspi-io');
 const filter = require('lodash.filter');
@@ -30,6 +31,9 @@ More info here: https://github.com/nebrius/raspi-io/wiki/Pin-Information
 
 const hPin = 'P1-';
 
+// inputs are pull - "up" or "down" using internal resistors
+const pud = "down";
+
 /*
 Create array (require array) of devices and index them by pin number.
 forEach device, generate new johnny-five object.
@@ -38,16 +42,20 @@ forEach device, generate new johnny-five object.
 var devicesDB = [
   {
     "pin": 7,
-    "type": "Relay"
+    "type": "Relay",
+    "pinAction" : null
   },{
     "pin": 11,
-    "type": "Relay"
+    "type": "Relay",
+    "pinAction" : null
   },{
     "pin": 13,
-    "type": "Relay"
+    "type": "Relay",
+    "pinAction" : null
   },{
-    "pin": 15,
-    "type": "Relay"
+    "pin": 31,
+    "type": "Button",
+    "pinAction" : 7
   }
 ];
 */
@@ -66,34 +74,55 @@ var relayStatus = filter(devicesDB.myDevices, { type: 'Relay' });
 //initialize the johnny-five board
 board.on("ready", function() {
 
-// initialize all devices from database...
-devicesDB.myDevices.forEach(function(item){
-      var devType = item.type;
-      var devPin= item.gpin.toString();
-      var thePin = hPin + devPin;
-      console.log(devType+devPin + " @ " +thePin);
-      this[devType+devPin] = new five[devType](thePin);
-     console.log('new device created: '+[devType+devPin]);
+  // initialize all devices from database...
+  devicesDB.myDevices.forEach(function(item){
+        var devType = item.type;
+        var devPin= item.gpin.toString();
+        var thePin = hPin + devPin;
+        var actPin = item.pinAction;
 
-     // place device object in array at position equal to it's pin number
-     devices[item.gpin] = this[devType+devPin];
-     //console.log(devices[item.gpin] )
-});
+        console.log(devType+devPin + " @ " +thePin);
+        if(devType=="Button" && actPin !== null){
+          this[devType+devPin] = new five[devType]({pin: thePin, isPulldown: true});
 
-//console.log('deviceDB json: '+ JSON.stringify(devicesDB));
-//console.log('devices array: '+ devices);
+          // Button Functions
+          // Toggle the relays on 'bump'
+          this[devType+devPin].on("down", function() {
+              var url = host+'/gpio/'+actPin+'/Relay/toggle';
+              needle.post(url);
+            })
+        }
+        else{
+          this[devType+devPin] = new five[devType](thePin);
+        }
+       console.log('New device created: '+[devType+devPin]);
+       // place device object in array at position equal to it's pin number
+       devices[item.gpin] = this[devType+devPin];
+  });
 
-var trigger = {
-  toggle: (device) => {
-            device.toggle();
-          },
-  on:     (device) => {
-            device.on();
-          },
-  off:    (device) => {
-            device.off();
-          }
-};
+// board cleanup on exit
+this.on("exit",function(){
+  devicesDB.myDevices.forEach(function(item){
+    if(item.type=="Relay"){
+      devices[item.gpin].off();
+    }
+  })
+
+})
+
+
+// Relay functions
+  var trigger = {
+    toggle: (device) => {
+              device.toggle();
+            },
+    on:     (device) => {
+              device.on();
+            },
+    off:    (device) => {
+              device.off();
+            }
+  };
 
 /* GET home page. */
   router.post('/:pin/:type/:onoff', function(req, res){
@@ -107,16 +136,15 @@ var trigger = {
     // websocket through socket.io
     var msg;
     if(onoff == "on"){msg = true}else if(onoff == "off"){msg=false}else{msg=toggleStatus};
-    socket.emit("pinChange", {"pin": parseInt(pin), "method": onoff, "status": msg}); //send button status to server
-
-
+    //send button status to server
+    socket.emit("pinChange", {"pin": parseInt(pin), "method": onoff, "status": msg});
 
     // send off to trigger pin using trigger functions. allows for additional
-    // functions or custom macros. This is the preffered method.
+    // functions or custom macros. This is the preferred method.
     trigger[onoff](devices[pin]);
     // alternate way utilzing the commands directly.
-    //devices[parseInt(pin,10)][onoff]();
-    res.send({'response': "success!"});
+    //devices[parseInt(pin)][onoff]();
+    res.send({'Pin' : pin, 'Method' : onoff, 'Response': "Success!" });
   });
 
   router.get('/:pin', function(req, res, next){
@@ -147,14 +175,13 @@ var trigger = {
     res.send({'ds': ds});
   });
 
-
   router.get('/*', function(req, res) {
-  res.render('gpio', {
-      title: 'GPIO RESTful API',
-      heading: 'GPIO',
-      pageID: 'gpio'});
+    res.render('gpio', {
+        title: 'GPIO RESTful API',
+        heading: 'GPIO',
+        pageID: 'gpio'});
   });
 
 
-});
+}); // j5 board
 module.exports = router;

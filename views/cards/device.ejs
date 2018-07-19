@@ -1,7 +1,10 @@
-<div class="col-6 col-sm-4 col-md-3 mx-auto ">
-      <button id="btn<%= item.gpin %>" class="btn btn-secondary btn-sq-md border-danger mb-3" data-pinstate="false" data-pin="<%=item.gpin %>" data-type="<%= item.type %>">
-        <h6 class="d-block m-2"><%= item.name %></h6>
-        <i class="fas fa-power-off fa-3x text-danger "></i>
-        <span class="d-block text-danger mt-1">OFF</span>
-      </button>
+<div class="col-sm-12 col-md-6 col-lg-3">
+  <div id="card<%= item.gpin %>" class="card text-white bg-success mb-3" style="max-width: 20rem;">
+      <h4 class="card-header"> <%= item.name %> <span class="badge badge-light"><%= item.type %> </h4>
+      <div class="card-body">
+        <p class="card-text">
+          Device is <%= item.status %>
+        </p>
+      </div>
+  </div>
 </div>

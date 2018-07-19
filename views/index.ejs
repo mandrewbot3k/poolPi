@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
   <%- include('partials/head') %>
-
+  <!-- Load js dependencies -->
+  <%- include('partials/bs_scripts') %>
   <body id="<%= pageID %>">
 
     <!-- include the navigation bar -->
     <%- include('partials/nav') %>
 
+<script>
+$function(){
+var socket = io(); //load socket.io-client and connect to the host that serves the page
+
+// define pinstatus API
+var pinValue;
+var statusUrl;
+hostn = 'poolPi';
+var getStatus = '/gpio/pinstatus';
+statusUrl = 'http://' + hostn +  ':3000' +  getStatus;
+
+// Get the current pin status and change button display
+$.get(statusUrl, function(data) {
+  data.ds.forEach(function(item, index){
+    if(item == true){
+      $('#card'+index).addClass('card-danger');
+    }
+  })
+});
+
+}
+</script>
+
     <!-- Page content -->
     <div class="container mainBody" style="width: 100%;">
+<div class="row">
+      <% devices.forEach(function(item){ %>
+        <%- include('cards/device', {item: item}) %>
+      <% }); %>
+</div>
 
-
-      <%- include('cards/currentweather') %>
-
-    <div class="col-sm-12 col-md-6 col-lg-4">
-      <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-        <div class="card-header">Device Status</div>
-        <div class="card-body">
-          <h4 class="card-title">Pool Pump</h4>
-          <p class="card-text"> Pool Pump Running 00:33:27</p>
-        </div>
-      </div>
-    </div>
-
-      <div class="col-sm-12 col-md-6 col-lg-4">
-        <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
-          <div class="card-header">Device Status</div>
-          <div class="card-body">
-            <h4 class="card-title">Backyard Lights</h4>
-            <p class="card-text">Backyard Lights are ON</p>
-          </div>
-        </div>
-      </div>
     </div>
 
 
-    <!-- Load js dependencies -->
-    <%- include('partials/bs_scripts') %>
+
 
   </body>
 </html>

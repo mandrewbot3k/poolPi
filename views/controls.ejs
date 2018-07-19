@@ -92,6 +92,7 @@ $(function(){
 
 
   <body id="<%= pageID %>">
+
     <!-- include the navigation bar -->
     <%- include('partials/nav') %>
 
@@ -103,7 +104,7 @@ $(function(){
 
           <% devicestats.forEach(function(item){ %>
 
-            <%- include('cards/device', {item: item}) %>
+            <%- include('cards/device_ctrl', {item: item}) %>
           <% }); %>
           <% function isEven(value) {return (value%2 == 0);}
           if(devicestats.length != 0){%>

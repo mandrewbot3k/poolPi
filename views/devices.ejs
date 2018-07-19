@@ -9,21 +9,17 @@
 
     <!-- Page content -->
     <div class="container mainBody">
-      <h1>Current Schedules</h1>
-      <table class='table table-striped'>
+      <h1>My Devices</h1>
+      <table class='table table-striped table-responsive'>
         <thead>
-          <th>Program #</th>
+          <th>Program ID</th>
           <th>Name</th>
           <th>Description</th>
-          <th>DeviceID</th>
-          <th>Enabled</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Days</th>
           <th>Type</th>
+          <th>Pin</th>
         </thead>
-      <% schedule.forEach(function(item){ %>
-        <%- include('cards/sch_item', {item: item}) %>
+      <% data.forEach(function(item){ %>
+        <%- include('cards/device_items', {item: item}) %>
       <% }); %>
     </table>
     </div>
