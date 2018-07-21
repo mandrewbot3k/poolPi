@@ -13,6 +13,7 @@
     "start": "nodemon --verbose -e ejs,js --ignore 'public/' ./bin/www"
   },
   "dependencies": {
+    "chokidar": "^2.0.4",
     "console-stamp": "^0.2.6",
     "cookie-parser": "~1.4.3",
     "date-time": "^2.1.0",

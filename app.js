@@ -7,6 +7,7 @@ var logger = require('morgan');
 var configFile = require('./data/config.json');
 var io = require('socket.io');
 var myschedules = require('./data/node-schedule');
+const chokidar = require('chokidar');
 
 //routes
 var indexRouter = require('./routes/index');
@@ -40,7 +41,20 @@ app.use('/devices', deviceRouter);
 app.use('/gpio', gpioAPI);
 
 // Set the setTimers
-var poolTimer = myschedules.setTimers();
+var poolTimer = ()=>{
+  myschedules.cancelTimers();
+  myschedules.setTimers();
+};
+poolTimer();
+
+// Watch the timer schedule and update the timers on change
+var schWatcher = chokidar.watch('./data/schedule.json',{awaitWriteFinish: true, usePolling: false});
+
+schWatcher.on('change',()=>{
+  console.log("Schedule Changed");
+  poolTimer();
+})
+
 
 // Set global app variables from data/config.json
 app.locals.siteTitle = configFile.appTitle;
