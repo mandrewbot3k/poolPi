@@ -65,7 +65,7 @@ $(function(){
      //console.log(state);
 
      var url = './gpio/' + $(this).data('pin') + '/' + $(this).data('type') + '/toggle';
-      $.post(url, function(){
+      $.post(url, { src : "Manual" }, function(){
             if(state == "false"){
               turnOn(currID);
             //  socket.emit("pinChange", {"pin": $(currID).data("pin"), "status": true}); //send button status to server

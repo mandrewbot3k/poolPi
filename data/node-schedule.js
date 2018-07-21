@@ -11,7 +11,7 @@ const configFile = require('../data/config');
 const myDs = require('../data/devices');
 
 // globals
-const hostn = 'http://poolPi:';
+const hostn = 'http://localhost:';
 const port = '3000';
 const host = hostn + port;
 
@@ -46,7 +46,7 @@ module.exports = {
     var devType = myDs.myDevices[a].type;
     var devPin = String(myDs.myDevices[a].gpin);
 
-    console.log("[" + item.ID + "]" +item.description +":");
+    var theLog = "[" + item.ID + "]" +item.description +":";
 
 // check if schedule is enabled
 if(item.enabled == 1){
@@ -63,7 +63,7 @@ if(item.enabled == 1){
       // Log the time set and fix minutes for log display:
       if (startrule.minute == 0){displayStartMin = "0"+startrule.minute;}
       else {displayStartMin = startrule.minute};
-      console.log("Timer Start: " + startrule.hour + ":" + displayStartMin);
+      theLog = theLog + " Timer Start: " + startrule.hour + ":" + displayStartMin;
 
           // Add Start Action here
           var j = ns.scheduleJob(startrule, function(){
@@ -75,7 +75,7 @@ if(item.enabled == 1){
             var url = host + str;
 
             // post command to GPIO API
-            needle.post(url, {}, function(err, resp){
+            needle.post(url, {src : "Timer"+item.ID }, function(err, resp){
               if(err){console.log(err)};
               //console.log(resp);
             })
@@ -93,7 +93,8 @@ if(item.enabled == 1){
       // Log the time set and fix minutes for log display:
       if (endrule.minute == 0){displayEndMin = "0" + endrule.minute;}
       else {displayEndMin = endrule.minute};
-      console.log("Timer End: " + endrule.hour +":"+ displayEndMin);
+      theLog = theLog + "  Timer End: " + endrule.hour +":"+ displayEndMin;
+      console.log(theLog);
 
           // Add end action here
           var j = ns.scheduleJob(endrule, function(){
@@ -105,7 +106,7 @@ if(item.enabled == 1){
             var url = host + str;
 
             // post command to GPIO API
-            needle.post(url, {}, function(err, resp){
+            needle.post(url, {src : "Timer"+item.ID }, function(err, resp){
               if(err){console.log(err)};
               //console.log(resp);
             })

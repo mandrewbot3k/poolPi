@@ -73,8 +73,8 @@
     "deviceID": 2,
     "timertype": "onoff",
     "enabled": 1,
-    "startTime": {"h" : 0, "m": 24},
-    "endTime": {"h" : 0, "m": 26},
+    "startTime": {"h" : 0, "m": 39},
+    "endTime": {"h" : 0, "m": 40},
     "daysofweek": [0,1,2,3,4,5,6],
     "action": "Relay"
   }

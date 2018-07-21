@@ -40,7 +40,7 @@
     "description" : "Input to manually turn on pool lights (1 hour timer)",
     "type" : "Button",
     "gpin" : 29,
-    "pinAction" : null
+    "pinAction" : 7
   },{
     "ID": 11,
     "name": "Yard Lights Button",

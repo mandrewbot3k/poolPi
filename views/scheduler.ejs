@@ -2,7 +2,8 @@
 <html lang="en">
 
   <%- include('partials/head') %>
-
+  <!-- Load js dependencies -->
+  <%- include('partials/bs_scripts') %>
   <body id="<%= pageID %>">
     <!-- include the navigation bar -->
     <%- include('partials/nav') %>
@@ -28,8 +29,7 @@
     </table>
     </div>
 
-    <!-- Load js dependencies -->
-    <%- include('partials/bs_scripts') %>
+
 
   </body>
 </html>

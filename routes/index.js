@@ -21,6 +21,7 @@ degreeUnit = configFile.poolinfo.degreeUnit;
 
 /* GET home page. */
 router.get('/', function(req, res, next){
+//var pins = needle.get('http://localhost:3000/gpio/pinstatus');
   res.render('index', {
       title: 'poolPi',
       heading: 'Home',

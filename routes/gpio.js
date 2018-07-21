@@ -5,13 +5,15 @@ const five = require('johnny-five')
 const raspi = require('raspi-io');
 const filter = require('lodash.filter');
 const io = require('socket.io-client');
+const dateFormat = require('dateformat');
+const fs = require('fs');
 
 //files
 const devicesDB = require('../data/devices');
 
 // shortcuts
 var router = express.Router();
-const hostn = 'http://poolPi:';
+const hostn = 'http://localhost:';
 const port = '3000';
 const host = hostn + port;
 const socket = io.connect(host);
@@ -61,11 +63,54 @@ var devicesDB = [
 */
 
 socket.on('connect', () => {
-  console.log(socket.id); // 'G5p5...'
+  console.log("Socket ID: " + socket.id + "  Established: " + dateFormat(Date.now(), "dddd, mmmm dS, yyyy, h:MM:ss TT")); // 'G5p5...'
 });
 
 // create an array to store device objects in to call from
 var devices = [];
+
+/*
+create an array to log activity
+devLog = [
+  {
+  "Relay7": [{
+    "last" : {
+          "on": {"time": 1532037665991, "src" : null},
+          "off": {"time": 1532037655548, "src" : null}
+          }
+    },{
+      "log" : {
+        "on": [
+          {"time": 1532037665991, "src" : null},
+          {"time": 1532037665991, "src" : null}
+       ],
+        "off": [
+          {"time": 1532037665991, "src" : null},
+          {"time": 1532037665991, "src" : null}
+       ]
+     }}
+  ],
+  "Relay11": [{
+    "last" : {
+          "on": {  "time": 1532037665991, "src" : null},
+          "off": {"time": 1532037655548, "src" : null}
+          }
+    },{
+      "log" : {
+        "on": [
+          {"time": 1532037665991,"src" : null},
+          {"time": 1532037665991,"src" : null}
+       ],
+        "off": [
+          {"time": 1532037665991,"src" : null},
+          {"time": 1532037665991,"src" : null}
+       ]
+     }}
+  ]
+}
+]
+*/
+var devLog = [JSON.parse(fs.readFileSync('./data/devLog.json', "utf8"))];
 
 // Get the relays
 var relayStatus = filter(devicesDB.myDevices, { type: 'Relay' });
@@ -81,7 +126,7 @@ board.on("ready", function() {
         var thePin = hPin + devPin;
         var actPin = item.pinAction;
 
-        console.log(devType+devPin + " @ " +thePin);
+    //console.log(devType+devPin + " @ " +thePin);
         if(devType=="Button" && actPin !== null){
           this[devType+devPin] = new five[devType]({pin: thePin, isPulldown: true});
 
@@ -89,15 +134,36 @@ board.on("ready", function() {
           // Toggle the relays on 'bump'
           this[devType+devPin].on("down", function() {
               var url = host+'/gpio/'+actPin+'/Relay/toggle';
-              needle.post(url);
+              needle.post(url, {src: "Button"});
             })
         }
         else{
           this[devType+devPin] = new five[devType](thePin);
         }
-       console.log('New device created: '+[devType+devPin]);
+    //console.log('New device created: '+[devType+devPin]);
        // place device object in array at position equal to it's pin number
        devices[item.gpin] = this[devType+devPin];
+  });
+
+var pushLog = (obj, onoff, src) => {
+  console.log("pushLog: " + obj + "   " + onoff + "   " + src);
+    var dt = Date.now();
+    // default structure
+    var defObj = { last: { on: { time: null, src: null }, off: { time: null, src: null }},  log: { on: [], off: [] } };
+    // check if device exists in log, if not create
+    if(!devLog[0][obj]){
+      devLog[0][obj] = defObj;
+    }
+    // Update log
+    devLog[0][obj]["last"][onoff] = {time: dt, src: src};
+    devLog[0][obj]["log"][onoff].push({time: dt, src: src});
+}
+
+var writeLog = () => fs.writeFile("./data/devLog.json", JSON.stringify(devLog[0], null, 2), 'utf8', function (err) {
+    if (err) {
+        return console.log(err);
+    }
+    console.log("Log Updated");
   });
 
 // board cleanup on exit
@@ -107,20 +173,21 @@ this.on("exit",function(){
       devices[item.gpin].off();
     }
   })
-
-})
-
+});
 
 // Relay functions
   var trigger = {
-    toggle: (device) => {
+    toggle: (device, cb) => {
               device.toggle();
+              cb();
             },
-    on:     (device) => {
+    on:     (device, cb) => {
               device.on();
+              cb();
             },
-    off:    (device) => {
+    off:    (device, cb) => {
               device.off();
+              cb();
             }
   };
 
@@ -131,17 +198,47 @@ this.on("exit",function(){
     var type = req.params.type;
     var pin = req.params.pin;
     var onoff = req.params.onoff;
+    if(req.body.src){
+      var src = req.body.src;
+    }
+    else{var src = null;}
+
     grabDevice = devices[pin]
     var toggleStatus = !grabDevice.isOn;
     // websocket through socket.io
     var msg;
-    if(onoff == "on"){msg = true}else if(onoff == "off"){msg=false}else{msg=toggleStatus};
+    console.log(src + "    " +   pin);
+    if(onoff == "on"){
+        msg = true;
+        if(toggleStatus == true){
+          pushLog(pin, onoff, src);
+        }
+      }
+      else if(onoff == "off"){
+        msg = false;
+        if(toggleStatus == false){
+          pushLog(pin, onoff, src);
+        }
+      }
+      else{
+        msg = toggleStatus;
+        if(toggleStatus == true){
+          pushLog(pin, "off", src);
+        }
+        else{
+          pushLog(pin, "on", src);
+        }
+
+    };
     //send button status to server
     socket.emit("pinChange", {"pin": parseInt(pin), "method": onoff, "status": msg});
 
     // send off to trigger pin using trigger functions. allows for additional
-    // functions or custom macros. This is the preferred method.
-    trigger[onoff](devices[pin]);
+    // functions or custom macros. This is the preferred method. callback function writes to log
+
+  trigger[onoff](devices[pin],writeLog);
+
+
     // alternate way utilzing the commands directly.
     //devices[parseInt(pin)][onoff]();
     res.send({'Pin' : pin, 'Method' : onoff, 'Response': "Success!" });
