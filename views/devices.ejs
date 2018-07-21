@@ -4,13 +4,14 @@
   <%- include('partials/head') %>
   <!-- Load js dependencies -->
   <%- include('partials/bs_scripts') %>
-  
+
   <body id="<%= pageID %>">
     <!-- include the navigation bar -->
     <%- include('partials/nav') %>
 
     <!-- Page content -->
     <div class="container mainBody">
+      <div class="row"><div id="warnings" class="col-12"></div></div>
       <h1>My Devices</h1>
       <table class='table table-striped table-responsive'>
         <thead>

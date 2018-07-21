@@ -3,10 +3,11 @@
 // v3.1.0
 //Docs at http://simpleweatherjs.com
 $(function(){
+  var simWeather = (zip, FC)=>{
   $.simpleWeather({
-    location: "95320",
+    location: zip,
     woeid: '',
-    unit: 'f',
+    unit: FC,
     success: function(weather) {
       //html = '<h5><i class="wi wi-yahoo-'+weather.code+'"> '+weather.temp+'&deg;'+weather.units.temp+'</h5>';
       html = '<span class=" h5 navbar-text m-0 p-0"><i id="weatherIcon" class="h2 wi wi-yahoo-' + weather.code + '"></i>    '+weather.temp+'&deg;'+weather.units.temp+'</span>'
@@ -16,16 +17,22 @@ $(function(){
       //html += '<li class="currently">'+weather.currently+'</li></ul>';
     //  html += '<li>'+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+'</li></ul>';
 
-      $("nav").append('<span class="navbar-text p-0" id="weather">'+html+'</span>');
+      $("#weather").html(html)
+      $("#weatherAlert").alert('close');
+
+      //$("nav").append('<span class="navbar-text p-0" id="weather">'+html+'</span>');
+
     },
     error: function(error) {
       console.log(error);
-      $("#warnings").append('<div class="alert alert-dismissible alert-warning">')
-            .append('<button type="button" class="close" data-dismiss="alert">&times;</button>')
-            .append('<h4 class="alert-heading">Error!</h4>')
-            .append('<p class="mb-0">'+error+'</p></div>')
+      $("#warnings").html('<div id="weatherAlert" class="alert alert-dismissible alert-danger">'+
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+            '<strong>ERROR:  </strong>'+error+'</div>');
     }
   });
+}
+simWeather("95320","f")
+setInterval(()=>{simWeather("95320","f");},30000)
 });
 
 </script>
@@ -52,5 +59,5 @@ $(function(){
             <a class="nav-link <% if (heading === 'Devices'){%> active <% } %>" href="/devices">Devices</a>
           </li>
       </div>
-
+      <span class="navbar-text p-0" id="weather"></span>
 </nav>

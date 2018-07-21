@@ -33,6 +33,7 @@ $.get(statusUrl, function(data) {
 
     <!-- Page content -->
     <div class="container mainBody" style="width: 100%;">
+      <div class="row"><div id="warnings" class="col-12"></div></div>
 <div class="row">
       <% devices.forEach(function(item){ %>
         <%- include('cards/device', {item: item}) %>
