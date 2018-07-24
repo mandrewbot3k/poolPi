@@ -1,0 +1,59 @@
+{
+  "myDevices": [{
+    "ID": 1,
+    "name": "Pool Pump",
+    "description": "Jandy Pool Pump",
+    "type": "Relay",
+    "gpin": 7,
+    "pinAction" : null
+  },{
+    "ID": 2,
+    "name": "Pool Light",
+    "description" : "Pool Light",
+    "type" : "Relay",
+    "gpin" : 11,
+    "pinAction" : null
+  },{
+    "ID": 3,
+    "name": "Yard Lights",
+    "description" : "Pole lights around the Pool.",
+    "type" : "Relay",
+    "gpin" : 13,
+    "pinAction" : null
+  },{
+    "ID": 4,
+    "name": "TEST",
+    "description" : "Test Output",
+    "type" : "Relay",
+    "gpin" : 15,
+    "pinAction" : null
+  },{
+    "ID": 5,
+    "name": "TEST",
+    "description" : "Test Output",
+    "type" : "Relay",
+    "gpin" : 16,
+    "pinAction" : null
+  },{
+    "ID": 10,
+    "name": "Pool Light Button",
+    "description" : "Input to manually turn on pool lights (1 hour timer)",
+    "type" : "Button",
+    "gpin" : 29,
+    "pinAction" : 7
+  },{
+    "ID": 11,
+    "name": "Yard Lights Button",
+    "description" : "Input to manually turn on lights (30 minute timer) ",
+    "type" : "Button",
+    "gpin" : 31,
+    "pinAction" : null
+  },{
+    "ID": 12,
+    "name": "Pool Pump Button",
+    "description" : "Input to turn on the pool pump (1 hour timer)",
+    "type" : "Button",
+    "gpin" : 33,
+    "pinAction" : null
+  }]
+}

@@ -3,14 +3,94 @@
   <%- include('partials/head') %>
   <!-- Load js dependencies -->
   <%- include('partials/bs_scripts') %>
+
+
   <body id="<%= pageID %>">
 
     <!-- include the navigation bar -->
     <%- include('partials/nav') %>
 
 <script>
-$function(){
+$(function(){
 var socket = io(); //load socket.io-client and connect to the host that serves the page
+
+function myTimer(pin, startTime){
+  //clearInterval();
+  var now = new Date();
+  elapsedTotal = (now - startTime);
+  elapsedDay = Math.floor((elapsedTotal / (1000*60*60*24)));
+  elapsedHr = Math.floor((elapsedTotal % (1000*60*60*24))/(1000*60*60));
+  elapsedMin = Math.floor((elapsedTotal % (1000*60*60))/(1000*60));
+  elapsedSec = Math.floor((elapsedTotal % (1000*60))/1000);
+  if(elapsedHr<10){elapsedHr = "0"+ elapsedHr};
+  if(elapsedMin<10){elapsedMin = "0"+ elapsedMin};
+  if(elapsedSec<10){elapsedSec = "0"+ elapsedSec};
+  elapsed = elapsedHr+':'+elapsedMin+':'+elapsedSec;
+  $('#card'+pin+' .card-body .clock').html(elapsed);
+}
+// create timer interval array
+var thisTimer = [];
+
+function getTimer(pin, sTime){
+  url = './gpio/log';
+  var pinInt = parseInt(pin);
+  clearInterval(thisTimer[pinInt]);
+  $.getJSON(url, (data)=>{
+    if(sTime){startTimerTime = sTime}
+    else{startTimerTime = new Date(data[pin].last.on.time)};
+    var startSrc = data[pin].last.on.src;
+    $('#card'+pin + ' .card-body .clockSrc').html(startSrc);
+
+  })
+  .done(()=>{
+      thisTimer[pin] = setInterval(()=>{myTimer(pin, startTimerTime)},500);
+      console.log("Successfully pulled device log and invoked timer")})
+  .fail(()=>{console.log("Error getting device log and timer")})
+}
+
+function deviceIsOn(index, emitStartTime){
+  console.log(index + '   ' + emitStartTime);
+  if(emitStartTime){}
+  var currID = '#card'+index;
+  var currBod = currID +' .card-text';
+  $(currID).removeClass('border-danger').addClass('border-success');
+  $(currID).attr("data-pinstate", "true");
+  $(currBod).html("Current Run Time : <span class='h1 badge badge-success clock'></span>");
+  $(currID+' .onoff').addClass('badge-success').removeClass('badge-danger').html("ON");
+  $(currBod).append("<p class='mt-1 mb-0'>Started by : <span class='badge badge-success  clockSrc'></span></p>");
+  getTimer(index, emitStartTime);
+}
+
+function deviceIsOff(index, emitStopTime){
+  console.log(index + '   ' + emitStopTime);
+  var currID = '#card'+index;
+  var currBod = currID +' .card-text';
+  $(currID).removeClass('border-success').addClass('border-danger');
+  $(currID).attr("data-pinstate", "false");
+  $(currBod).html("<span>Currently OFF</span>")
+  $(currID+' .onoff').addClass('badge-danger').removeClass('badge-success').html("OFF");
+//console.log(thisTimer);
+  url = './gpio/log';
+  clearInterval(thisTimer[parseInt(index)]);
+  $.getJSON(url, (data)=>{
+    if(emitStopTime){lastTimer = emitStopTime}
+    else{lastTimer = new Date(data[index].last.off.time)};
+    $(currBod).append("<p>Last on: " + lastTimer +" </p>")
+    thisTimer[index] = null;
+  })
+      .done(()=>{console.log("Success")})
+      .fail(()=>{console.log("Failed")})
+}
+
+socket.on('pinChange', function(data){
+  if(data.status == true){
+    clearInterval(thisTimer[data.pin])
+    deviceIsOn(String(data.pin), new Date());
+  }
+  else{
+    deviceIsOff(String(data.pin), new Date());
+  }
+})
 
 // define pinstatus API
 var pinValue;
@@ -19,16 +99,16 @@ hostn = 'poolPi';
 var getStatus = '/gpio/pinstatus';
 statusUrl = 'http://' + hostn +  ':3000' +  getStatus;
 
-// Get the current pin status and change button display
+// Get the current pin status and call card display functions
 $.get(statusUrl, function(data) {
   data.ds.forEach(function(item, index){
-    if(item == true){
-      $('#card'+index).addClass('card-danger');
-    }
+    if(item == true){deviceIsOn(index)}
+    else if(item == false){deviceIsOff(index)}
+    else {return};
   })
 });
 
-}
+});
 </script>
 
     <!-- Page content -->

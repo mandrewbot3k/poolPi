@@ -272,6 +272,12 @@ this.on("exit",function(){
     res.send({'ds': ds});
   });
 
+  router.get('/log', function(req, res, next){
+    app.set('json spaces', 2);
+    var readLog = JSON.parse(fs.readFileSync('./data/devLog.json', "utf8"));
+    res.json(readLog)
+  })
+
   router.get('/*', function(req, res) {
     res.render('gpio', {
         title: 'GPIO RESTful API',
